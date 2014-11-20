@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletRequest;
  * @since 2.0.9
  *
  */
-class WebVariablesMap extends VariablesMap<String,Object> {
+class WebVariablesMap extends VariablesMap<String,Object> implements RequestAttributeNameChangeListener {
 
 
     private static final long serialVersionUID = 3862067921983550180L;
@@ -115,6 +115,11 @@ class WebVariablesMap extends VariablesMap<String,Object> {
         Enumeration<String> names = request.getAttributeNames();
         while (names.hasMoreElements()) {
             this.attributeNames.add(names.nextElement());
+        }
+        // try to subscribe as a listener to request attribute name changes
+        AttributeNameChangeNotifyingRequestWrapper wrapper = AttributeNameChangeNotifyingRequestWrapper.findWrapper(request);
+        if (wrapper != null) {
+            wrapper.subscribe(this);
         }
 
         if (m != null) {
@@ -294,6 +299,18 @@ class WebVariablesMap extends VariablesMap<String,Object> {
 
 
 
+    public void attributeAdded(String name) {
+        this.attributeNames.add(name);
+    }
+
+
+
+    public void attributeRemoved(String name) {
+        this.attributeNames.remove(name);
+    }
+
+
+
     @Override
     public String toString() {
         final Map<String,Object> attributeMap = getAttributeMap(this.request);
@@ -380,4 +397,5 @@ class WebVariablesMap extends VariablesMap<String,Object> {
     public WebVariablesMap clone() {
         return (WebVariablesMap) super.clone();
     }
+
 }

@@ -223,11 +223,13 @@
       <optional>true</optional>
     </dependency>
 
-    
+    <!-- Thymeleaf will work with Servlet 2.5, but contains -->
+    <!-- classes annotated with Servlet 3.0 annotations for -->
+    <!-- when the servlet container supports them.          -->
     <dependency>
       <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
